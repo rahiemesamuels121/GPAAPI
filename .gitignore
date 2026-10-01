@@ -1,0 +1,6 @@
+# Visual Studio temporary files & caches
+.vs/
+bin/
+obj/
+*.user
+*.suo

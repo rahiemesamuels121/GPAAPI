@@ -1,0 +1,409 @@
+[
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "Create",
+    "RelativePath": "api/wat-applications",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "application",
+        "Type": "GPACARICOMAPI.Models.WATApplication",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "GetProgress",
+    "RelativePath": "api/wat-applications/{applicationId}/progress",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "CompleteStage",
+    "RelativePath": "api/wat-applications/{applicationId}/stages/{stageId}/complete",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "stageId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.WATDocumentController",
+    "Method": "UploadDocument",
+    "RelativePath": "api/wat-applications/docs/{applicationId}/documents/{documentTypeId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "documentTypeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ArticleController",
+    "Method": "AddArticle",
+    "RelativePath": "Article/addArticle",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "article",
+        "Type": "GPACARICOMAPI.Models.DTO.GPACARICOMAPI.Models.ArticleDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ArticleController",
+    "Method": "GetArticles",
+    "RelativePath": "Article/getAllArticles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[GPACARICOMAPI.Models.Article, GPACARICOMAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ArticleController",
+    "Method": "GetArticle",
+    "RelativePath": "Article/getArticle/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GPACARICOMAPI.Models.Article",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ArticleController",
+    "Method": "UpdateArticle",
+    "RelativePath": "Article/updateArticle/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "article",
+        "Type": "GPACARICOMAPI.Models.Article",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "GPACARICOMAPI.Models.UserLoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.AuthController",
+    "Method": "RefreshToken",
+    "RelativePath": "Auth/refreshToken",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "GPACARICOMAPI.Models.DTO.AppUserDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.AuthController",
+    "Method": "VerifyEmailAddress",
+    "RelativePath": "Auth/verify-email",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ProgramController",
+    "Method": "AddProgram",
+    "RelativePath": "Program/addProgram",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "program",
+        "Type": "GPACARICOMAPI.Models.ProgramModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ProgramController",
+    "Method": "DeleteProgram",
+    "RelativePath": "Program/deleteProgram/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ProgramController",
+    "Method": "GetPrograms",
+    "RelativePath": "Program/getAllPrograms",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[GPACARICOMAPI.Models.ProgramModel, GPACARICOMAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ProgramController",
+    "Method": "GetProgram",
+    "RelativePath": "Program/getProgram/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GPACARICOMAPI.Models.ProgramModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.ProgramController",
+    "Method": "UpdateProgram",
+    "RelativePath": "Program/updateProgram/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "program",
+        "Type": "GPACARICOMAPI.Models.ProgramModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.TestimonialController",
+    "Method": "AddNewTestimonial",
+    "RelativePath": "Testimonial/AddTestimonial",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "testimonial",
+        "Type": "GPACARICOMAPI.Models.TestimonialModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.TestimonialController",
+    "Method": "GetllATestimonials",
+    "RelativePath": "Testimonial/getAllTestimonials",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "GPACARICOMAPI.Models.TestimonialModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.TestimonialController",
+    "Method": "GetTestimonial",
+    "RelativePath": "Testimonial/getTestimonial/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "GPACARICOMAPI.Models.TestimonialModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "GPACARICOMAPI.Controllers.TestimonialController",
+    "Method": "UpdateTestimonial",
+    "RelativePath": "Testimonial/updateTestimonial/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "testimonial",
+        "Type": "GPACARICOMAPI.Models.TestimonialModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

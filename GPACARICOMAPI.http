@@ -1,0 +1,6 @@
+@GPACARICOMAPI_HostAddress = http://localhost:5128
+
+GET {{GPACARICOMAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
