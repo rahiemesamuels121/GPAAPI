@@ -13,6 +13,7 @@ public class WATApplication : IValidatableObject
     // =========================================================
 
     public long Id { get; set; }
+    public long ApplicantId { get; set; }
 
     public string? FirstName { get; set; }
 

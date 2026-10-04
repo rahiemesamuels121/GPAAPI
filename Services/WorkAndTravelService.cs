@@ -129,4 +129,23 @@ public class WorkAndTravelService
             stageId,
             cancellationToken);
     }
+
+    public async Task<bool> CheckForActiveApplicationAsync(int year , string userID, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(userID))
+            throw new ArgumentException("User ID is required.", nameof(userID));
+
+        return await _repository.CheckForActiveApplicationAsync(year, userID, cancellationToken);
+    }
+
+    public async Task<WATApplication> GetUserApplicationAsync(int season, string userId, CancellationToken cancellationToken = default)
+    {
+        if (season == default)
+            throw new ArgumentException("Season is required.", nameof(season));
+        if (string.IsNullOrWhiteSpace(userId))
+            throw new ArgumentException("User ID is required.", nameof(userId));
+
+        return await _repository.GetUserApplicationAsync(season, userId, cancellationToken);
+    }
+
 }

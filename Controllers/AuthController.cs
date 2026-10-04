@@ -6,6 +6,7 @@ using GPACARICOMAPI.Services;
 using GPACARICOMAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Mysqlx;
 
 
 
@@ -19,6 +20,8 @@ public class AuthController : ControllerBase
 {
     private readonly IAuthService _auth;
     private readonly AuthHelper _authHelper;
+
+        private IConfiguration _config;
     private readonly IVerificationService _verificationService;
         private readonly IEmailService _emailService;
 
@@ -28,6 +31,7 @@ public class AuthController : ControllerBase
         _authHelper = new AuthHelper(config);
         _verificationService = verificationService;
         _emailService= emailService;
+            _config = config;
     }
 
     [AllowAnonymous]
@@ -103,15 +107,29 @@ public class AuthController : ControllerBase
 
     //TODO:
     [AllowAnonymous]
-    [HttpPost("verify-email")]
-    public async Task<IActionResult> VerifyEmailAddress([FromForm] EmailVerificationRequest request) {
+    [HttpGet("verify-email")]
+    public async Task<IActionResult> VerifyEmailAddress(
+        [FromQuery] string token,
+        [FromQuery] string email) {
 
-            // string userId = User.FindFirst("userId")?.Value + "";
-           var response = await _verificationService.VerifyToken(request.token,request.email);
-        return Redirect("");
+            string userId = User.FindFirst("userId")?.Value + "";
+            var response = await _verificationService.VerifyToken(token, email);
+            if (response)
+            {
+                var  frontend = _config.GetValue<String>("AppSettings:FrontEndUrl");
+
+                return Redirect(frontend) ?? Redirect("Https://google.com");
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+            
+
+        }
+
+
+
     }
-
-
-
-}
 }

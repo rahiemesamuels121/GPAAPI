@@ -68,3 +68,4 @@ C:\Users\webdeveloper\source\repos\GPACARICOMAPI\obj\Release\net10.0\GPACARICOMA
 C:\Users\webdeveloper\source\repos\GPACARICOMAPI\obj\Release\net10.0\ref\GPACARICOMAPI.dll
 C:\Users\webdeveloper\source\repos\GPACARICOMAPI\bin\Release\net10.0\dotnet-tools.json
 C:\Users\webdeveloper\source\repos\GPACARICOMAPI\bin\Release\net10.0\BCrypt-Net-Next.dll
+C:\Users\webdeveloper\source\repos\GPACARICOMAPI\obj\Release\net10.0\GPACARICOMAPI.sourcelink.json

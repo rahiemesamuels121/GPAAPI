@@ -66,5 +66,6 @@ C:\Users\webdeveloper\source\repos\GPACARICOMAPI\bin\Debug\net10.0\Microsoft.Ide
 C:\Users\webdeveloper\source\repos\GPACARICOMAPI\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\webdeveloper\source\repos\GPACARICOMAPI\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\webdeveloper\source\repos\GPACARICOMAPI\bin\Debug\net10.0\dotnet-tools.json
-C:\Users\webdeveloper\source\repos\GPACARICOMAPI\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\webdeveloper\source\repos\GPACARICOMAPI\bin\Debug\net10.0\BCrypt-Net-Next.dll
+C:\Users\webdeveloper\source\repos\GPACARICOMAPI\obj\Debug\net10.0\GPACARICOMAPI.sourcelink.json
+C:\Users\webdeveloper\source\repos\GPACARICOMAPI\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt

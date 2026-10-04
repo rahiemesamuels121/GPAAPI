@@ -2,10 +2,11 @@
 using GPACARICOMAPI.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MySql.Data.MySqlClient;
 
 [Authorize]
 [ApiController]
-[Route("api/wat-applications")]
+[Route("Work-And-Travel/applications")]
 public class WATApplicationsController : ControllerBase
 {
     private readonly IWorkAndTravelRepository _service;
@@ -15,9 +16,6 @@ public class WATApplicationsController : ControllerBase
     {
         _service = service;
     }
-
-
-
 
 
     [HttpPost]
@@ -58,8 +56,8 @@ public class WATApplicationsController : ControllerBase
                     message = "An error occurred while submitting the application."
                 });
         }
-
     }
+
     [HttpGet("{applicationId:long}/progress")]
     public async Task<IActionResult> GetProgress(
      long applicationId,
@@ -70,7 +68,6 @@ public class WATApplicationsController : ControllerBase
                 .GetApplicationProgressAsync(
                     applicationId,
                     cancellationToken);
-
         if (progress is null)
         {
             return NotFound(new
@@ -119,5 +116,117 @@ public class WATApplicationsController : ControllerBase
                 "Stage completed successfully. " +
                 "The next stage has been activated."
         });
+
+
+
+    }
+
+    [HttpGet("/HasExistingApplication")]
+    public async Task<IActionResult> CheckForExistingApplications(
+    int year,
+    CancellationToken cancellationToken)
+    {
+        string userId = User.FindFirst("userId")?.Value + "";
+        try
+        {
+
+            var hasApplication =
+                await _service
+                    .CheckForActiveApplicationAsync(
+                    year,
+                    userId,
+                    cancellationToken
+
+                    );
+            if (hasApplication)
+            {
+                return Ok(new
+                {
+                    success = false,
+                    message =
+                        "Application Exists."
+                });
+            }
+
+            return Ok(new
+            {
+                success = true,
+                data = hasApplication
+            });
+
+        }
+        catch
+        {
+            return BadRequest(
+                new
+                {
+                    success = false,
+                    message = "Server Error Occured"
+                }
+                );
+
+        }
+
+
+
+
+    }
+
+
+    [HttpGet("/ExistingApplication/Get")]
+    public async Task<IActionResult> GetUserApplicationAsync(
+   int year,
+   CancellationToken cancellationToken)
+    {
+        string userId = User.FindFirst("userId")?.Value + "";
+        try
+        {
+
+            var hasApplication =
+                await _service
+                    .GetUserApplicationAsync(
+                    year,
+                    userId,
+                    cancellationToken
+                    );
+
+            if (hasApplication == null)
+            {
+                return Ok(new
+                {
+                    success = false,
+                    message =
+                        "Application Exists."
+                });
+            }
+
+            return Ok(new
+            {
+                success = true,
+                data = hasApplication
+            });
+
+        }
+        catch
+        {
+            return BadRequest(
+                new
+                {
+                    success = false,
+                    message = "Server Error Occured"
+                }
+                );
+
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }

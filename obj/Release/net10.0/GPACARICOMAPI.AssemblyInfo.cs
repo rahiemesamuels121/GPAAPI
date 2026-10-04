@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GPACARICOMAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4e196e82462677344a3b695e22c3a8177e66affb")]
 [assembly: System.Reflection.AssemblyProductAttribute("GPACARICOMAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GPACARICOMAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,58 +1,5 @@
 [
   {
-    "ContainingType": "WATApplicationsController",
-    "Method": "Create",
-    "RelativePath": "api/wat-applications",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "application",
-        "Type": "GPACARICOMAPI.Models.WATApplication",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WATApplicationsController",
-    "Method": "GetProgress",
-    "RelativePath": "api/wat-applications/{applicationId}/progress",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "applicationId",
-        "Type": "System.Int64",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WATApplicationsController",
-    "Method": "CompleteStage",
-    "RelativePath": "api/wat-applications/{applicationId}/stages/{stageId}/complete",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "applicationId",
-        "Type": "System.Int64",
-        "IsRequired": true
-      },
-      {
-        "Name": "stageId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "GPACARICOMAPI.Controllers.WATDocumentController",
     "Method": "UploadDocument",
     "RelativePath": "api/wat-applications/docs/{applicationId}/documents/{documentTypeId}",
@@ -207,18 +154,50 @@
     "ContainingType": "GPACARICOMAPI.Controllers.AuthController",
     "Method": "VerifyEmailAddress",
     "RelativePath": "Auth/verify-email",
-    "HttpMethod": "POST",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "email",
+        "Name": "token",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "token",
+        "Name": "email",
         "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "GetUserApplicationAsync",
+    "RelativePath": "ExistingApplication/Get",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "CheckForExistingApplications",
+    "RelativePath": "HasExistingApplication",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
         "IsRequired": false
       }
     ],
@@ -401,6 +380,59 @@
       {
         "Name": "testimonial",
         "Type": "GPACARICOMAPI.Models.TestimonialModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "Create",
+    "RelativePath": "Work-And-Travel/applications",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "application",
+        "Type": "GPACARICOMAPI.Models.WATApplication",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "GetProgress",
+    "RelativePath": "Work-And-Travel/applications/{applicationId}/progress",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "CompleteStage",
+    "RelativePath": "Work-And-Travel/applications/{applicationId}/stages/{stageId}/complete",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "applicationId",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "stageId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

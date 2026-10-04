@@ -18,5 +18,9 @@ namespace GPACARICOMAPI.Repositories.Interface
     long applicationId,
     int stageId,
     CancellationToken cancellationToken = default);
+        Task<bool> CheckForActiveApplicationAsync(int year, string userID, CancellationToken cancellationToken = default);
+        Task<WATApplication> GetUserApplicationAsync(int season, string userId, CancellationToken cancellationToken = default);
     }
+
+
 }

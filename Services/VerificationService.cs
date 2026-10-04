@@ -1,4 +1,5 @@
 ﻿using GPACARICOMAPI.Services.Interfaces;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Asn1.Ocsp;
@@ -26,16 +27,27 @@ namespace GPACARICOMAPI.Services
         }
 
         //Generates the confirmation link to be sent to the user for email verification
-        public string GenerateConfirmationLink(string token, string email )
-        {
-            var baseUrl = _configuration.GetSection("AppSettings:BaseUrl").Value;
-            string confirmationLink = $"{baseUrl}/Auth/verify-email/?token={token}?emaul={email}";
-            return confirmationLink;
-        }
+       
 
 
-        //saves the token to the database for later verification
-        public async Task<bool> SaveToken(string user_id, string token ) {
+public string GenerateConfirmationLink(string token, string email)
+    {
+        var baseUrl = _configuration["AppSettings:BaseUrl"];
+
+        var url = $"https://{baseUrl}/Auth/verify-email";
+
+        return QueryHelpers.AddQueryString(
+            url,
+            new Dictionary<string, string?>
+            {
+                ["token"] = token,
+                ["email"] = email
+            });
+    }
+
+
+    //saves the token to the database for later verification
+    public async Task<bool> SaveToken(string user_id, string token ) {
 
             using var connection = _connectionFactory.GetConnection();
             await connection.OpenAsync();
@@ -68,38 +80,109 @@ namespace GPACARICOMAPI.Services
 
 
         //verifies the token sent by the user against the token stored in the database
-        public async Task<bool> VerifyToken(string token, string email) {
-
+        public async Task<bool> VerifyToken(string token, string email)
+        {
             using var connection = _connectionFactory.GetConnection();
             await connection.OpenAsync();
 
-            var query = @"SELECT 
-            u.id,
-            u.firstname,
-            u.lastname,
-            u.email,
-            e.token
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var query = @"
+            SELECT 
+                u.id,
+                e.token
             FROM users u
             INNER JOIN email_verification_tokens e
-            ON u.id = a.user_id
+                ON u.id = e.user_id
             WHERE u.email = @email
-            AND u.is_verified = 0;";
-            using var command = new MySqlCommand(query, connection);
+              AND u.is_verified = 0
+            LIMIT 1;
+        ";
 
-            command.Parameters.AddWithValue("@userId", email);
-            var reader = await command.ExecuteReaderAsync();
+                long userId;
 
-            if (await reader.ReadAsync())
-            {
-               var tokenFromDb = reader.GetString("token");
-                if (tokenFromDb == null)
+                using (var command = new MySqlCommand(query, connection, transaction))
                 {
-                    return false;
+                    command.Parameters.AddWithValue("@email", email);
+
+                    using var reader = await command.ExecuteReaderAsync();
+
+                    if (!await reader.ReadAsync())
+                    {
+                        await transaction.RollbackAsync();
+                        return false;
+                    }
+
+                    var tokenFromDb = reader["token"]?.ToString();
+
+                    if (string.IsNullOrWhiteSpace(tokenFromDb))
+                    {
+                        await transaction.RollbackAsync();
+                        return false;
+                    }
+
+                    if (!string.Equals(
+                            token,
+                            tokenFromDb,
+                            StringComparison.Ordinal))
+                    {
+                        await transaction.RollbackAsync();
+                        return false;
+                    }
+
+                    userId = Convert.ToInt64(reader["id"]);
                 }
-                return token == tokenFromDb;
+
+                // Mark user as verified
+                var updateQuery = @"
+            UPDATE users
+            SET is_verified = 1
+            WHERE id = @userId
+              AND is_verified = 0;
+        ";
+
+                using (var updateCommand =
+                       new MySqlCommand(updateQuery, connection, transaction))
+                {
+                    updateCommand.Parameters.AddWithValue("@userId", userId);
+
+                    var rowsAffected =
+                        await updateCommand.ExecuteNonQueryAsync();
+
+                    if (rowsAffected == 0)
+                    {
+                        await transaction.RollbackAsync();
+                        return false;
+                    }
+                }
+
+                // Remove verification token
+                var deleteQuery = @"
+            DELETE FROM email_verification_tokens
+            WHERE user_id = @userId;
+        ";
+
+                using (var deleteCommand =
+                       new MySqlCommand(deleteQuery, connection, transaction))
+                {
+                    deleteCommand.Parameters.AddWithValue("@userId", userId);
+
+                    await deleteCommand.ExecuteNonQueryAsync();
+                }
+
+                await transaction.CommitAsync();
+
+                return true;
             }
-            return false;
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
+
 
     }
 }

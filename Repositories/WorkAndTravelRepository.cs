@@ -3,6 +3,7 @@ using GPACARICOMAPI.Repositories.Interface;
 using GPACARICOMAPI.Services.Interfaces;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Data.Common;
 
 namespace GPACARICOMAPI.Repositories;
 
@@ -725,5 +726,371 @@ public class WorkAndTravelRepository : IWorkAndTravelRepository
 
             throw;
         }
+    }
+
+    public async Task<bool> CheckForActiveApplicationAsync(
+     int year,
+     string userId,
+     CancellationToken cancellationToken = default)
+    {
+        await using var connection =
+            _connectionFactory.GetConnection();
+
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = """
+        SELECT EXISTS
+        (
+            SELECT 1
+            FROM WATApplications
+            WHERE ApplicantId = @UserId
+              AND ReceivedDate >= STR_TO_DATE(
+                    CONCAT(@Year, '-07-01'),
+                    '%Y-%m-%d'
+                  )
+              AND ReceivedDate < STR_TO_DATE(
+                    CONCAT(@Year + 1, '-06-30'),
+                    '%Y-%m-%d'
+                  )
+        ) AS HasApplication;
+        """;
+
+        await using var command =
+            new MySqlCommand(
+                sql,
+                connection);
+
+        command.Parameters.AddWithValue(
+            "@Year",
+            year);
+
+        command.Parameters.AddWithValue(
+            "@UserId",
+            userId);
+
+        var result =
+            await command.ExecuteScalarAsync(
+                cancellationToken);
+
+        return Convert.ToBoolean(result);
+    }
+
+    public async Task<WATApplication> GetUserApplicationAsync(
+        int season,
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        await using var connection =
+        _connectionFactory.GetConnection();
+
+        await connection.OpenAsync(cancellationToken);
+
+        const string sql = """
+        SELECT *
+        FROM WATApplications
+        WHERE ApplicantId = @UserId
+          AND ReceivedDate >= STR_TO_DATE(
+                CONCAT(@Year, '-07-01'),
+                '%Y-%m-%d'
+              )
+          AND ReceivedDate < STR_TO_DATE(
+                CONCAT(@Year + 1, '-06-30'),
+                '%Y-%m-%d'
+              )
+        ORDER BY ReceivedDate DESC
+        LIMIT 1;
+        """;
+
+        await using var command =
+            new MySqlCommand(
+                sql,
+                connection);
+
+        command.Parameters.AddWithValue(
+            "@Year",
+            season);
+
+        command.Parameters.AddWithValue(
+            "@UserId",
+            userId);
+
+        await using var reader =
+            await command.ExecuteReaderAsync(
+                cancellationToken);
+
+        if (!await reader.ReadAsync(cancellationToken))
+        {
+            return null;
+        }
+
+        return new WATApplication
+        {
+            Id = reader.GetInt64("Id"),
+
+            ApplicantId =
+                reader.GetInt64("ApplicantId"),
+
+            FirstName =
+                GetNullableString(reader, "FirstName"),
+
+            MiddleName =
+                GetNullableString(reader, "MiddleName"),
+
+            LastName =
+                GetNullableString(reader, "LastName"),
+
+            DateOfBirth =
+                GetNullableDateOnly(
+                    reader,
+                    "DateOfBirth"),
+
+            ParishOfBirth =
+                GetNullableString(
+                    reader,
+                    "ParishOfBirth"),
+
+            HomeAddress =
+                GetNullableString(
+                    reader,
+                    "HomeAddress"),
+
+            Email =
+                GetNullableString(
+                    reader,
+                    "Email"),
+
+            CellPhone =
+                GetNullableString(
+                    reader,
+                    "CellPhone"),
+
+            HomePhone =
+                GetNullableString(
+                    reader,
+                    "HomePhone"),
+
+            Gender =
+                GetNullableString(
+                    reader,
+                    "Gender"),
+
+            Instagram =
+                GetNullableString(
+                    reader,
+                    "Instagram"),
+
+            Facebook =
+                GetNullableString(
+                    reader,
+                    "Facebook"),
+
+            TikTok =
+                GetNullableString(
+                    reader,
+                    "TikTok"),
+
+            OtherSocialMedia =
+                GetNullableString(
+                    reader,
+                    "OtherSocialMedia"),
+
+            University =
+                GetNullableString(
+                    reader,
+                    "University"),
+
+            SchoolAddress =
+                GetNullableString(
+                    reader,
+                    "SchoolAddress"),
+
+            ProgrammeOfStudy =
+                GetNullableString(
+                    reader,
+                    "ProgrammeOfStudy"),
+
+            AcademicYear =
+                GetNullableInt(
+                    reader,
+                    "AcademicYear"),
+
+            DepartureDate =
+                GetNullableDateOnly(
+                    reader,
+                    "DepartureDate"),
+
+            ReturnDate =
+                GetNullableDateOnly(
+                    reader,
+                    "ReturnDate"),
+
+            Emergency1Name =
+                GetNullableString(
+                    reader,
+                    "Emergency1Name"),
+
+            Emergency1Relation =
+                GetNullableString(
+                    reader,
+                    "Emergency1Relation"),
+
+            Emergency1Address =
+                GetNullableString(
+                    reader,
+                    "Emergency1Address"),
+
+            Emergency1Phone =
+                GetNullableString(
+                    reader,
+                    "Emergency1Phone"),
+
+            Emergency1Email =
+                GetNullableString(
+                    reader,
+                    "Emergency1Email"),
+
+            Emergency2Name =
+                GetNullableString(
+                    reader,
+                    "Emergency2Name"),
+
+            Emergency2Relation =
+                GetNullableString(
+                    reader,
+                    "Emergency2Relation"),
+
+            Emergency2Address =
+                GetNullableString(
+                    reader,
+                    "Emergency2Address"),
+
+            Emergency2Phone =
+                GetNullableString(
+                    reader,
+                    "Emergency2Phone"),
+
+            Emergency2Email =
+                GetNullableString(
+                    reader,
+                    "Emergency2Email"),
+
+            PreviousJ1 =
+                GetNullableBool(
+                    reader,
+                    "PreviousJ1"),
+
+            PreviousJ1Details =
+                GetNullableString(
+                    reader,
+                    "PreviousJ1Details"),
+
+            PreviousJ1Count =
+                GetNullableInt(
+                    reader,
+                    "PreviousJ1Count"),
+
+            OverseasSponsors =
+                GetNullableString(
+                    reader,
+                    "OverseasSponsors"),
+
+            LocalAgency =
+                GetNullableString(
+                    reader,
+                    "LocalAgency"),
+
+            PassportNumber =
+                GetNullableString(
+                    reader,
+                    "PassportNumber"),
+
+            Ssn =
+                GetNullableString(
+                    reader,
+                    "Ssn"),
+
+            VisaRefused =
+                GetNullableBool(
+                    reader,
+                    "VisaRefused"),
+
+            VisaRefusedCategory =
+                GetNullableString(
+                    reader,
+                    "VisaRefusedCategory"),
+
+            ParticipationSummary =
+                GetNullableString(
+                    reader,
+                    "ParticipationSummary"),
+
+            AllAcknowledgementsApproved =
+                reader.GetBoolean(
+                    "AllAcknowledgementsApproved"),
+
+            ReceivedBy =
+                GetNullableString(
+                    reader,
+                    "ReceivedBy"),
+
+            ReceivedDate =
+                GetNullableDateOnly(
+                    reader,
+                    "ReceivedDate")
+        };
+
+
+    }
+
+    private static string? GetNullableString(
+    DbDataReader reader,
+    string columnName)
+    {
+        var ordinal =
+            reader.GetOrdinal(columnName);
+
+        return reader.IsDBNull(ordinal)
+            ? null
+            : reader.GetString(ordinal);
+    }
+
+    private static int? GetNullableInt(
+        DbDataReader reader,
+        string columnName)
+    {
+        var ordinal =
+            reader.GetOrdinal(columnName);
+
+        return reader.IsDBNull(ordinal)
+            ? null
+            : reader.GetInt32(ordinal);
+    }
+
+    private static bool? GetNullableBool(
+        DbDataReader reader,
+        string columnName)
+    {
+        var ordinal =
+            reader.GetOrdinal(columnName);
+
+        return reader.IsDBNull(ordinal)
+            ? null
+            : reader.GetBoolean(ordinal);
+    }
+
+    private static DateOnly? GetNullableDateOnly(
+        DbDataReader reader,
+        string columnName)
+    {
+        var ordinal =
+            reader.GetOrdinal(columnName);
+
+        if (reader.IsDBNull(ordinal))
+        {
+            return null;
+        }
+
+        return DateOnly.FromDateTime(
+            reader.GetDateTime(ordinal));
     }
 }

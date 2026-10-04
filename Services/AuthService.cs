@@ -436,7 +436,7 @@ namespace GPACARICOMAPI.Services
                 await _emailService.sendEmail(
                      reciever: email,
                      subject: "Email Verification Required",
-                     body: $@"<h1>Welcome to GPACARICOM</h1><p>Please click the link below to verify your email address:</p><a href='{verificationLink}?email={email}'>Verify Email</a>"
+                     body: $@"<h1>Welcome to GPACARICOM</h1><p>Please click the link below to verify your email address:</p><a href='{verificationLink}'>Verify Email</a>"
                      );
                 return true;
 
