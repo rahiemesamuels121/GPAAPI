@@ -187,7 +187,7 @@ namespace GPACARICOMAPI.Services
                     reader.GetString("email");
 
                 role =
-                    reader.GetString("role_name");
+                    reader.GetInt32("role_id").ToString();
             }
 
             // Reader is now CLOSED/DISPOSED.

@@ -16,10 +16,11 @@ namespace GPACARICOMAPI.Helpers
         }
 
 
-        public string CreateToken(string userId) 
+        public string CreateToken(string userId, string role) 
         {
             Claim[] claims = new Claim[] {
              new Claim("userId", userId),
+             new Claim("user_role",role )
             };
 
             SymmetricSecurityKey tokenKey = new SymmetricSecurityKey(

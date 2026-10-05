@@ -172,38 +172,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WATApplicationsController",
-    "Method": "GetUserApplicationAsync",
-    "RelativePath": "ExistingApplication/Get",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "year",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WATApplicationsController",
-    "Method": "CheckForExistingApplications",
-    "RelativePath": "HasExistingApplication",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "year",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "GPACARICOMAPI.Controllers.ProgramController",
     "Method": "AddProgram",
     "RelativePath": "Program/addProgram",
@@ -387,24 +355,8 @@
   },
   {
     "ContainingType": "WATApplicationsController",
-    "Method": "Create",
-    "RelativePath": "Work-And-Travel/applications",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "application",
-        "Type": "GPACARICOMAPI.Models.WATApplication",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WATApplicationsController",
     "Method": "GetProgress",
-    "RelativePath": "Work-And-Travel/applications/{applicationId}/progress",
+    "RelativePath": "WorkAndTravel/applications/{applicationId}/progress",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -420,7 +372,7 @@
   {
     "ContainingType": "WATApplicationsController",
     "Method": "CompleteStage",
-    "RelativePath": "Work-And-Travel/applications/{applicationId}/stages/{stageId}/complete",
+    "RelativePath": "WorkAndTravel/applications/{applicationId}/stages/{stageId}/complete",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -433,6 +385,80 @@
       {
         "Name": "stageId",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "GetApplications",
+    "RelativePath": "WorkAndTravel/applications/getAllApplications",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ApplicantId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "GetUserApplicationAsync",
+    "RelativePath": "WorkAndTravel/applications/getExistingApplication",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "CheckForExistingApplications",
+    "RelativePath": "WorkAndTravel/applications/hasExistingApplication",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WATApplicationsController",
+    "Method": "Create",
+    "RelativePath": "WorkAndTravel/applications/postApplication",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "application",
+        "Type": "GPACARICOMAPI.Models.WATApplication",
         "IsRequired": true
       }
     ],

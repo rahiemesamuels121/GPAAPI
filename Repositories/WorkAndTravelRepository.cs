@@ -1,4 +1,5 @@
-﻿using GPACARICOMAPI.Models;
+﻿using GPACARICOMAPI.Helpers;
+using GPACARICOMAPI.Models;
 using GPACARICOMAPI.Repositories.Interface;
 using GPACARICOMAPI.Services.Interfaces;
 using MySql.Data.MySqlClient;
@@ -10,11 +11,13 @@ namespace GPACARICOMAPI.Repositories;
 public class WorkAndTravelRepository : IWorkAndTravelRepository
 {
     private readonly IConnectionFactory _connectionFactory;
+    private readonly WorkAndTravelHelper _helper;
 
     public WorkAndTravelRepository(
         IConnectionFactory connectionFactory)
     {
         _connectionFactory = connectionFactory;
+        _helper = new WorkAndTravelHelper();
     }
 
     public async Task<long> CreateApplicationAsync(
@@ -823,274 +826,64 @@ public class WorkAndTravelRepository : IWorkAndTravelRepository
             return null;
         }
 
-        return new WATApplication
+        return _helper.MapApplication(reader);
+       
+
+
+    }
+
+    
+
+    public async Task<IEnumerable<WATApplication>> GetAllApplicationsAsync(
+    string? ApplicantId,
+    DateTime? startDate,
+    DateTime? endDate,
+    CancellationToken cancellationToken)
+    {
+        using var connection = _connectionFactory.GetConnection();
+
+        await connection.OpenAsync(cancellationToken);
+
+        const string query = """
+        SELECT *
+        FROM WATApplications
+        WHERE (@ApplicantId IS NULL OR ApplicantID = @ApplicantId)
+          AND (@StartDate IS NULL OR ReceivedDate >= @StartDate)
+          AND (@EndDate IS NULL OR ReceivedDate < DATE_ADD(@EndDate, INTERVAL 1 DAY))
+        ORDER BY ReceivedDate DESC;
+        """;
+
+        using var command = new MySqlCommand(query, connection);
+
+        command.Parameters.AddWithValue(
+            "@ApplicantId",
+            string.IsNullOrWhiteSpace(ApplicantId)
+                ? DBNull.Value
+                : ApplicantId);
+
+        command.Parameters.AddWithValue(
+            "@StartDate",
+            startDate.HasValue
+                ? startDate.Value
+                : DBNull.Value);
+
+        command.Parameters.AddWithValue(
+            "@EndDate",
+            endDate.HasValue
+                ? endDate.Value
+                : DBNull.Value);
+
+        var applications = new List<WATApplication>();
+
+        using var reader =
+            await command.ExecuteReaderAsync(cancellationToken);
+
+        while (await reader.ReadAsync(cancellationToken))
         {
-            Id = reader.GetInt64("Id"),
-
-            ApplicantId =
-                reader.GetInt64("ApplicantId"),
-
-            FirstName =
-                GetNullableString(reader, "FirstName"),
-
-            MiddleName =
-                GetNullableString(reader, "MiddleName"),
-
-            LastName =
-                GetNullableString(reader, "LastName"),
-
-            DateOfBirth =
-                GetNullableDateOnly(
-                    reader,
-                    "DateOfBirth"),
-
-            ParishOfBirth =
-                GetNullableString(
-                    reader,
-                    "ParishOfBirth"),
-
-            HomeAddress =
-                GetNullableString(
-                    reader,
-                    "HomeAddress"),
-
-            Email =
-                GetNullableString(
-                    reader,
-                    "Email"),
-
-            CellPhone =
-                GetNullableString(
-                    reader,
-                    "CellPhone"),
-
-            HomePhone =
-                GetNullableString(
-                    reader,
-                    "HomePhone"),
-
-            Gender =
-                GetNullableString(
-                    reader,
-                    "Gender"),
-
-            Instagram =
-                GetNullableString(
-                    reader,
-                    "Instagram"),
-
-            Facebook =
-                GetNullableString(
-                    reader,
-                    "Facebook"),
-
-            TikTok =
-                GetNullableString(
-                    reader,
-                    "TikTok"),
-
-            OtherSocialMedia =
-                GetNullableString(
-                    reader,
-                    "OtherSocialMedia"),
-
-            University =
-                GetNullableString(
-                    reader,
-                    "University"),
-
-            SchoolAddress =
-                GetNullableString(
-                    reader,
-                    "SchoolAddress"),
-
-            ProgrammeOfStudy =
-                GetNullableString(
-                    reader,
-                    "ProgrammeOfStudy"),
-
-            AcademicYear =
-                GetNullableInt(
-                    reader,
-                    "AcademicYear"),
-
-            DepartureDate =
-                GetNullableDateOnly(
-                    reader,
-                    "DepartureDate"),
-
-            ReturnDate =
-                GetNullableDateOnly(
-                    reader,
-                    "ReturnDate"),
-
-            Emergency1Name =
-                GetNullableString(
-                    reader,
-                    "Emergency1Name"),
-
-            Emergency1Relation =
-                GetNullableString(
-                    reader,
-                    "Emergency1Relation"),
-
-            Emergency1Address =
-                GetNullableString(
-                    reader,
-                    "Emergency1Address"),
-
-            Emergency1Phone =
-                GetNullableString(
-                    reader,
-                    "Emergency1Phone"),
-
-            Emergency1Email =
-                GetNullableString(
-                    reader,
-                    "Emergency1Email"),
-
-            Emergency2Name =
-                GetNullableString(
-                    reader,
-                    "Emergency2Name"),
-
-            Emergency2Relation =
-                GetNullableString(
-                    reader,
-                    "Emergency2Relation"),
-
-            Emergency2Address =
-                GetNullableString(
-                    reader,
-                    "Emergency2Address"),
-
-            Emergency2Phone =
-                GetNullableString(
-                    reader,
-                    "Emergency2Phone"),
-
-            Emergency2Email =
-                GetNullableString(
-                    reader,
-                    "Emergency2Email"),
-
-            PreviousJ1 =
-                GetNullableBool(
-                    reader,
-                    "PreviousJ1"),
-
-            PreviousJ1Details =
-                GetNullableString(
-                    reader,
-                    "PreviousJ1Details"),
-
-            PreviousJ1Count =
-                GetNullableInt(
-                    reader,
-                    "PreviousJ1Count"),
-
-            OverseasSponsors =
-                GetNullableString(
-                    reader,
-                    "OverseasSponsors"),
-
-            LocalAgency =
-                GetNullableString(
-                    reader,
-                    "LocalAgency"),
-
-            PassportNumber =
-                GetNullableString(
-                    reader,
-                    "PassportNumber"),
-
-            Ssn =
-                GetNullableString(
-                    reader,
-                    "Ssn"),
-
-            VisaRefused =
-                GetNullableBool(
-                    reader,
-                    "VisaRefused"),
-
-            VisaRefusedCategory =
-                GetNullableString(
-                    reader,
-                    "VisaRefusedCategory"),
-
-            ParticipationSummary =
-                GetNullableString(
-                    reader,
-                    "ParticipationSummary"),
-
-            AllAcknowledgementsApproved =
-                reader.GetBoolean(
-                    "AllAcknowledgementsApproved"),
-
-            ReceivedBy =
-                GetNullableString(
-                    reader,
-                    "ReceivedBy"),
-
-            ReceivedDate =
-                GetNullableDateOnly(
-                    reader,
-                    "ReceivedDate")
-        };
-
-
-    }
-
-    private static string? GetNullableString(
-    DbDataReader reader,
-    string columnName)
-    {
-        var ordinal =
-            reader.GetOrdinal(columnName);
-
-        return reader.IsDBNull(ordinal)
-            ? null
-            : reader.GetString(ordinal);
-    }
-
-    private static int? GetNullableInt(
-        DbDataReader reader,
-        string columnName)
-    {
-        var ordinal =
-            reader.GetOrdinal(columnName);
-
-        return reader.IsDBNull(ordinal)
-            ? null
-            : reader.GetInt32(ordinal);
-    }
-
-    private static bool? GetNullableBool(
-        DbDataReader reader,
-        string columnName)
-    {
-        var ordinal =
-            reader.GetOrdinal(columnName);
-
-        return reader.IsDBNull(ordinal)
-            ? null
-            : reader.GetBoolean(ordinal);
-    }
-
-    private static DateOnly? GetNullableDateOnly(
-        DbDataReader reader,
-        string columnName)
-    {
-        var ordinal =
-            reader.GetOrdinal(columnName);
-
-        if (reader.IsDBNull(ordinal))
-        {
-            return null;
+            applications.Add(
+                _helper.MapApplication(reader));
         }
 
-        return DateOnly.FromDateTime(
-            reader.GetDateTime(ordinal));
+        return applications;
     }
 }

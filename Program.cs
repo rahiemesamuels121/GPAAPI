@@ -12,33 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-builder.Services.AddScoped<IArticleRepository,
-                           ArticleRepository>();
+builder.Services.AddScoped<IArticleRepository,ArticleRepository>();
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<IWorkAndTravelRepository, WorkAndTravelRepository>();
 builder.Services.AddScoped<IWorkAndTravelService, WorkAndTravelService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IVerificationService, VerificationService>();
 builder.Services.AddScoped<ITestimonialRepository, TestimonialRepository>();
-builder.Services.AddScoped<IConnectionFactory,
-                           ConnectionFactory>();
-builder.Services.Configure<FileStorageOptions>(
-    builder.Configuration.GetSection("FileStorage"));
-
-builder.Services.AddScoped<
-    IFileStorageService,
-    FileStorageService>();
-
-builder.Services.AddScoped<
-    IWATDocumentRepository,
-    WATDocumentRepository>();
-
-builder.Services.AddScoped<
-    IWATDocumentService,
-    WATDocumentService>();
-
-
+builder.Services.AddScoped<IConnectionFactory,ConnectionFactory>();
+builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection("FileStorage"));
+builder.Services.AddScoped<IFileStorageService,FileStorageService>();
+builder.Services.AddScoped<IWATDocumentRepository,WATDocumentRepository>();
+builder.Services.AddScoped<IWATDocumentService,WATDocumentService>();
 builder.Services.AddControllers();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer(); // Required for minimal APIs / mapping

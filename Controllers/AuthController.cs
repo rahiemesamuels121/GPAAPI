@@ -46,7 +46,7 @@ public class AuthController : ControllerBase
             message = "Invalid Username or Password",
         });
 
-        response.Jwt = _authHelper.CreateToken(response.UserId.ToString());
+        response.Jwt = _authHelper.CreateToken(response.UserId.ToString(), response.Role);
 
         return Ok(new
             ApiResponse<UserLoginResponse>
@@ -82,6 +82,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> RefreshToken()
     {
         string userId = User.FindFirst("userId")?.Value + "";
+            string role = User.FindFirst("user_role")?.Value + "";
         var response = await _auth.refreshToken(userId);
         if (response == null) {
             return NotFound(
@@ -98,7 +99,7 @@ public class AuthController : ControllerBase
                 message = "successfully refreshed Token",
                 data = new Dictionary<string, string> {
                     {
-                    "token", _authHelper.CreateToken(userId)
+                    "token", _authHelper.CreateToken(userId, role)
                     }
                 }
             }

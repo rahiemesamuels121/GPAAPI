@@ -574,7 +574,7 @@
         }
       }
     },
-    "/Work-And-Travel/applications": {
+    "/WorkAndTravel/applications/postApplication": {
       "post": {
         "tags": [
           "WATApplications"
@@ -605,7 +605,7 @@
         }
       }
     },
-    "/Work-And-Travel/applications/{applicationId}/progress": {
+    "/WorkAndTravel/applications/{applicationId}/progress": {
       "get": {
         "tags": [
           "WATApplications"
@@ -628,7 +628,7 @@
         }
       }
     },
-    "/Work-And-Travel/applications/{applicationId}/stages/{stageId}/complete": {
+    "/WorkAndTravel/applications/{applicationId}/stages/{stageId}/complete": {
       "put": {
         "tags": [
           "WATApplications"
@@ -660,7 +660,7 @@
         }
       }
     },
-    "/HasExistingApplication": {
+    "/WorkAndTravel/applications/hasExistingApplication": {
       "get": {
         "tags": [
           "WATApplications"
@@ -682,7 +682,7 @@
         }
       }
     },
-    "/ExistingApplication/Get": {
+    "/WorkAndTravel/applications/getExistingApplication": {
       "get": {
         "tags": [
           "WATApplications"
@@ -694,6 +694,43 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/WorkAndTravel/applications/getAllApplications": {
+      "get": {
+        "tags": [
+          "WATApplications"
+        ],
+        "parameters": [
+          {
+            "name": "ApplicantId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
             }
           }
         ],

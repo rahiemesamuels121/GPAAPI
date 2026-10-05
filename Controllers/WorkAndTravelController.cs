@@ -6,7 +6,7 @@ using MySql.Data.MySqlClient;
 
 [Authorize]
 [ApiController]
-[Route("Work-And-Travel/applications")]
+[Route("WorkAndTravel/applications")]
 public class WATApplicationsController : ControllerBase
 {
     private readonly IWorkAndTravelRepository _service;
@@ -17,8 +17,7 @@ public class WATApplicationsController : ControllerBase
         _service = service;
     }
 
-
-    [HttpPost]
+    [HttpPost("postApplication")]
     public async Task<IActionResult> Create(
         [FromBody] WATApplication application,
         CancellationToken cancellationToken)
@@ -26,6 +25,15 @@ public class WATApplicationsController : ControllerBase
         try
         {
             string userId = User.FindFirst("userId")?.Value + "";
+
+            if (string.IsNullOrWhiteSpace(userId)) {
+                return Unauthorized(new
+                {
+                    success = false,
+                    message = "Invalid User Id"
+                });
+            }
+
             var didCreateApplication = await _service.CreateApplicationAsync(
                 userId,
                 application,
@@ -121,12 +129,21 @@ public class WATApplicationsController : ControllerBase
 
     }
 
-    [HttpGet("/HasExistingApplication")]
+    [HttpGet("hasExistingApplication")]
     public async Task<IActionResult> CheckForExistingApplications(
     int year,
     CancellationToken cancellationToken)
     {
         string userId = User.FindFirst("userId")?.Value + "";
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized(new
+            {
+                success = false,
+                message = "Invalid user id"
+            });
+        }
         try
         {
 
@@ -173,12 +190,21 @@ public class WATApplicationsController : ControllerBase
     }
 
 
-    [HttpGet("/ExistingApplication/Get")]
+    [HttpGet("getExistingApplication")]
     public async Task<IActionResult> GetUserApplicationAsync(
    int year,
    CancellationToken cancellationToken)
     {
         string userId = User.FindFirst("userId")?.Value + "";
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized(new
+            {
+                success = false,
+                message = "Invalid user id"
+            });
+        }
         try
         {
 
@@ -197,6 +223,7 @@ public class WATApplicationsController : ControllerBase
                     success = false,
                     message =
                         "Application Exists."
+ 
                 });
             }
 
@@ -218,15 +245,38 @@ public class WATApplicationsController : ControllerBase
                 );
 
         }
+    }
 
+    [HttpGet("getAllApplications")]
+public async Task<IActionResult> GetApplications(
+[FromQuery] string? ApplicantId,
+[FromQuery] DateTime? startDate,
+[FromQuery] DateTime? endDate,
+CancellationToken cancellationToken)
+    {
 
+        string role = User.FindFirst("user_role")?.Value + "";
 
+        if (role != "-1") {
+            return Unauthorized(
+                new { 
+                sucess = false,
+                message = "You dont have access to make this request"
 
+                }
+                );
+        }
+        var applications =
+            await _service.GetAllApplicationsAsync(
+                ApplicantId,
+                startDate,
+                endDate,
+                cancellationToken);
 
-
-
-
-
-
+        return Ok(new
+        {
+            success = true,
+            data = applications
+        });
     }
 }

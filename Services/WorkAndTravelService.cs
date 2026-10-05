@@ -148,4 +148,22 @@ public class WorkAndTravelService
         return await _repository.GetUserApplicationAsync(season, userId, cancellationToken);
     }
 
+    public async Task<IEnumerable<WATApplication>> GetAllApplicationsAsync(
+    string? ApplicantId,
+    DateTime? startDate,
+    DateTime? endDate,
+    CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(ApplicantId) && startDate == null && endDate == null) {
+            throw new ArgumentException("No Filters Provided");
+        }
+
+        if (startDate != null && endDate == null)
+        {
+            throw new ArgumentException("An End Date is Required");
+        }
+
+        return await _repository.GetAllApplicationsAsync(ApplicantId, startDate, endDate);
+    }
+
 }
